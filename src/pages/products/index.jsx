@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const Products = () => {
   const [product, setProduct] = useState([])
@@ -23,12 +24,16 @@ const Products = () => {
   
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold text-gray-600 mb-6">
-        All the available prducts
-      </h2>
-
-      <table class="border-separate border border-gray-400 text-center">
+    <div className="p-6 ">
+      <div className="flex justify-between mb-6">
+        <h2 className="text-2xl font-bold text-gray-600 ">
+          All the available prducts
+        </h2>
+        <button className="p-2 bg-blue-500 rounded-md text-white font-semibold">
+          <Link to="/addproduct">Add Products</Link>
+        </button>
+      </div>
+      <table class="border-separate border border-gray-400 text-center w-full">
         <thead>
           <tr className="">
             <th className="border border-gray-300 px-4 py-2">S.No.</th>
@@ -46,7 +51,7 @@ const Products = () => {
         <tbody>
           {product.map((item, idx) => (
             <tr>
-              <td className="border border-gray-300">{idx+1}</td>
+              <td className="border border-gray-300">{idx + 1}</td>
               <td className="border border-gray-300">
                 <img
                   className="w-36 h-36 object-cover object-center"
@@ -59,7 +64,9 @@ const Products = () => {
               <td className="border border-gray-300">
                 {item.quantity_in_stock}
               </td>
-              <td className="border border-gray-300 px-4">{item.expiry_date}</td>
+              <td className="border border-gray-300 px-4">
+                {item.expiry_date}
+              </td>
               <td className="border border-gray-300">{item.category}</td>
               <td className="border border-gray-300">{item.seller}</td>
               <td className="border border-gray-300 px-4">{item.created_at}</td>

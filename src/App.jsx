@@ -5,6 +5,7 @@ import Products from './pages/products'
 import Categories from './pages/categories'
 import Sellers from './pages/Sellers'
 import Transactions from './pages/transactions'
+import AddProductForm from './pages/form/addproductform'
 // import Sidebar from './components/Sidebar'
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/categories" element={<Categories />} />
         <Route path="/sellers" element={<Sellers />} />
         <Route path="/transactions" element={<Transactions />} />
+        <Route path='/addproduct' element={<AddProductForm />} />
       </Routes>
     </BrowserRouter>
   );
