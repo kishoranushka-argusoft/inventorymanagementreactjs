@@ -3,8 +3,12 @@ import { inputData } from "./data";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AddProductForm = () => {
+
+  const navigate = useNavigate()
+
   // const [product, setProduct] = useState("");
   // const [unitprice, setUnitprice] = useState(0);
   // const [weight, setWeight] = useState(0);
@@ -54,6 +58,8 @@ const AddProductForm = () => {
       const res = await axios.post("http://127.0.0.1:8000/api/v1/products/",formData)
       console.log("products added: ", res.data);
       toast.success("Product added successfully!")
+      navigate("/products")
+
     }
     catch(error){
       console.error("error adding product", error)
