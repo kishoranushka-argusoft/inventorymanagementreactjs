@@ -29,9 +29,14 @@ const Products = () => {
         <h2 className="text-2xl font-bold text-gray-600 ">
           All the available prducts
         </h2>
-        <button className="p-2 bg-blue-500 rounded-md text-white font-semibold">
-          <Link to="/addproduct">Add Products</Link>
-        </button>
+        <div className='flex gap-6'>
+          <button className="p-2 bg-blue-500 rounded-md text-white font-semibold">
+            <Link to="/">Dashboard</Link>
+          </button>
+          <button className="p-2 bg-blue-500 rounded-md text-white font-semibold">
+            <Link to="/addproduct">Add Products</Link>
+          </button>
+        </div>
       </div>
       <table className="border-separate border border-gray-400 text-center w-full">
         <thead>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { inputData } from "./data";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const AddProductForm = () => {
   // const [product, setProduct] = useState("");
@@ -51,15 +53,25 @@ const AddProductForm = () => {
     try{
       const res = await axios.post("http://127.0.0.1:8000/api/v1/products/",formData)
       console.log("products added: ", res.data);
+      toast.success("Product added successfully!")
     }
     catch(error){
       console.error("error adding product", error)
+      toast.error("Error adding product!")
     }
   };
 
   return (
     <>
-      <div className="bg-blue-100  flex items-center">
+      <div className="bg-blue-100  p-6 items-center">
+        <div className=" flex gap-6 items-end justify-end">
+          <button className="p-2 bg-blue-500 font-semibold text-white rounded-md">
+            <Link to="/"> Dashboard</Link>
+          </button>
+          <button className="p-2 bg-blue-500 font-semibold text-white rounded-md">
+            <Link to="/products"> View all products</Link>
+          </button>
+        </div>
         <div className="w-full">
           <h2 className="text-center text-blue-500 font-bold text-2xl uppercase my-10">
             Add Product
