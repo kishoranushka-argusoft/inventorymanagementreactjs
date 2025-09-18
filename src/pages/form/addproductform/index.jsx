@@ -59,12 +59,12 @@ const AddProductForm = () => {
 
   return (
     <>
-      <div className="bg-blue-200 min-h-screen flex items-center">
+      <div className="bg-blue-100  flex items-center">
         <div className="w-full">
           <h2 className="text-center text-blue-500 font-bold text-2xl uppercase my-10">
-            Fill out the form to add Product
+            Add Product
           </h2>
-          <div className="bg-white p-10 rounded-lg shadow md:w-3/4 mx-auto lg:w-1/2">
+          <div className="bg-white p-10 rounded-lg shadow-xl md:w-3/4 mx-auto lg:w-1/2">
             <form action="" method="post" onSubmit={handleSubmit}>
               {inputData.map((ele, idx) => (
                 <div className="mb-5" key={idx}>

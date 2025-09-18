@@ -33,7 +33,7 @@ const Products = () => {
           <Link to="/addproduct">Add Products</Link>
         </button>
       </div>
-      <table class="border-separate border border-gray-400 text-center w-full">
+      <table className="border-separate border border-gray-400 text-center w-full">
         <thead>
           <tr className="">
             <th className="border border-gray-300 px-4 py-2">S.No.</th>

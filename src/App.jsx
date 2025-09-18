@@ -6,12 +6,15 @@ import Categories from './pages/categories'
 import Sellers from './pages/Sellers'
 import Transactions from './pages/transactions'
 import AddProductForm from './pages/form/addproductform'
+// import { ToastContainer} from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 // import Sidebar from './components/Sidebar'
 
 const App = () => {
   return (
     <BrowserRouter>
       {/* <Sidebar /> */}
+      {/* <ToastContainer position='top-right' autoClose={3000} /> */}
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
