@@ -8,6 +8,7 @@ import Transactions from './pages/transactions'
 import AddProductForm from './pages/form/addproductform'
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DisplayProduct from './pages/products/displayProduct'
 // import Sidebar from './components/Sidebar'
 
 const App = () => {
@@ -21,7 +22,9 @@ const App = () => {
         <Route path="/categories" element={<Categories />} />
         <Route path="/sellers" element={<Sellers />} />
         <Route path="/transactions" element={<Transactions />} />
-        <Route path='/addproduct' element={<AddProductForm />} />
+        <Route path='/addproduct' element={<AddProductForm name="Add" />} />
+        <Route path= "/product/:productId" element= {<DisplayProduct/>} />
+        <Route path = "/editproduct/:productId" element={<AddProductForm name="Edit"  />} />
       </Routes>
     </BrowserRouter>
   );

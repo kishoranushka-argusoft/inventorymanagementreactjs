@@ -4,20 +4,20 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-const AddProductForm = () => {
+const AddProductForm = ({name}) => {
+
+  const formtype = {name}
 
   const navigate = useNavigate()
+  const productId = useParams()
+  console.log(productId);
 
-  // const [product, setProduct] = useState("");
-  // const [unitprice, setUnitprice] = useState(0);
-  // const [weight, setWeight] = useState(0);
-  // const [quantity, setQuantity] = useState(0);
-  // const [expirydate, setExpiryDate] = useState();
+
   const [category, setCategory] = useState([]);
   const [seller, setSeller] = useState([]);
-  // const [category, setcategory] = useState("");
-  // const [seller, setseller] = useState("");
+
 
   const [formData, setFormData] = useState({
     category: "",
@@ -28,6 +28,21 @@ const AddProductForm = () => {
     expiry_date: "",
     quantity_in_stock: "",
   });
+
+
+  const handleEdit = async(productId)=>{
+    try{
+      const editRes = await axios.put(`http://127.0.0.1:8000/api/v1/product/${productId}`,formData);
+      console.log(editRes.data);
+      toast.success("Product updated successfully!");
+      navigate("/products");
+
+
+    }catch(error){
+      toast.error("Error updating product!");
+      console.log("Error updating product!", error);
+    }
+  }
 
   useEffect(() => {
     const fetchCategoriesandSellers = async () => {
@@ -80,10 +95,10 @@ const AddProductForm = () => {
         </div>
         <div className="w-full">
           <h2 className="text-center text-blue-500 font-bold text-2xl uppercase my-10">
-            Add Product
+            {name} Product
           </h2>
           <div className="bg-white p-10 rounded-lg shadow-xl md:w-3/4 mx-auto lg:w-1/2">
-            <form action="" method="post" onSubmit={handleSubmit}>
+            <form action="" method="post" onSubmit={formtype=="Add"?handleSubmit:handleEdit}>
               {inputData.map((ele, idx) => (
                 <div className="mb-5" key={idx}>
                   <label
