@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/transactions" element={<Transactions />} />
         <Route path='/addproduct' element={<AddProductForm name="Add" />} />
         <Route path= "/product/:productId" element= {<DisplayProduct/>} />
-        <Route path = "/editproduct/:productId" element={<AddProductForm name="Edit"  />} />
+        <Route path = "/editproduct" element={<AddProductForm name="Edit"  />} />
       </Routes>
     </BrowserRouter>
   );

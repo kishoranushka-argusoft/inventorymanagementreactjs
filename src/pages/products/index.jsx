@@ -28,18 +28,21 @@ const Products = () => {
   },[])
 
 
-  const handleEdit =async(productId)=>{
-    console.log("111111111111",productId);
-    try{
-      const getEditProductRes = await axios.get(
-        `http://127.0.0.1:8000/api/v1/product/${productId}`
-      );
-      console.log("******************4444",getEditProductRes.data);
-      navigate(`/editproduct/${productId}`)
-    }
-    catch(error){
-      console.log("error fetching product", error)
-    }
+  const handleEdit =async(productItem)=>{
+    console.log(productItem);
+    // const productId = productItem.id
+    // console.log("111111111111",productId);
+    // try{
+    //   const getEditProductRes = await axios.get(
+    //     `http://127.0.0.1:8000/api/v1/product/${productId}`
+    //   );
+    //   console.log("******************4444",getEditProductRes.data);
+      // navigate(`/editproduct/${productItem}`)
+    navigate("/editproduct", {state: {productItem}})
+      // }
+    // catch(error){
+    //   console.log("error fetching product", error)
+    // }
   }
 
   const handleDelete = async (productId) => {
@@ -95,7 +98,7 @@ const Products = () => {
         </thead>
         <tbody>
           {product.map((item, idx) => (
-            <tr>
+            <tr key={idx}>
               <td className="border border-gray-300">{idx + 1}</td>
               <td className="border border-gray-300">
                 <img
@@ -118,7 +121,7 @@ const Products = () => {
               <td className="border border-gray-300 px-4">{item.updated_at}</td>
               {/* <td>{item.id}</td> */}
               <td className="border border-gray-300 px-4">
-                <Pencil color="green" onClick={() => handleEdit(item.id)} />
+                <Pencil color="green" onClick={() => handleEdit(item)} />
               </td>
               <td className="border border-gray-300 px-4">
                 <Trash2 color="red" onClick={() => handleDelete(item.id)} />
