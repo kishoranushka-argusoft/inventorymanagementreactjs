@@ -38,5 +38,5 @@ export const inputData = [
     name: "expiry_date",
     field: "Expiry Date",
     placeholder: "Put in the expiry date",
-  }
+  },
 ];

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
-import {  useNavigate } from "react-router-dom";
+import {  useNavigate} from "react-router-dom";
 
 const Products = () => {
 
   const navigate = useNavigate()
 
   const [product, setProduct] = useState([])
+  // const productlength = product.length
   // const { productId } = useParams();
 
   useEffect(()=>{
@@ -113,12 +114,16 @@ const Products = () => {
                 {item.quantity_in_stock}
               </td>
               <td className="border border-gray-300 px-4">
-                {item.expiry_date}
+                {item.expiry_date.split("T")[0]}
               </td>
-              <td className="border border-gray-300">{item.category}</td>
-              <td className="border border-gray-300">{item.seller}</td>
-              <td className="border border-gray-300 px-4">{item.created_at}</td>
-              <td className="border border-gray-300 px-4">{item.updated_at}</td>
+              <td className="border border-gray-300">{item.category.name}</td>
+              <td className="border border-gray-300">{item.seller[0].name}</td>
+              <td className="border border-gray-300 px-4">
+                {item.created_at.split("T")[0]}
+              </td>
+              <td className="border border-gray-300 px-4">
+                {item.updated_at.split("T")[0]}
+              </td>
               {/* <td>{item.id}</td> */}
               <td className="border border-gray-300 px-4">
                 <Pencil color="green" onClick={() => handleEdit(item)} />
