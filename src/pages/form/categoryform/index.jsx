@@ -11,125 +11,83 @@ const CategoryForm = ({ name }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // console.log("locationnnnnnnnnnnn",location);
-  // console.log("product item----->",location.state.productItem);
-  // console.log("product id----->", location.state.productItem.id);
 
-  const [category, setCategory] = useState([]);
-  const [seller, setSeller] = useState([]);
   const [productId, setProductId] = useState("");
-
   const [formData, setFormData] = useState({
-    category: "",
-    seller: "",
     name: "",
-    price: "",
-    weight: "",
-    expiry_date: "",
-    quantity_in_stock: "",
   });
 
-  // const productId = location.state.productItem.id;
-  // console.log("location", location);
-  // console.log("id : ", );
-  // console.log("Product id : ---------------->",productId);
 
-  const handleEdit = async (productId) => {
-    // console.log(e);
-    console.log(productId);
-    // e.preventDefault()
+
+  const handleEdit = async (categoryId) => {
+    console.log(categoryId);
     try {
       const editRes = await axios.put(
-        `http://127.0.0.1:8000/api/v1/product/${productId}`,
+        `http://127.0.0.1:8000/api/v1/category/${categoryId}`,
         formData
       );
       console.log("==========================", editRes.data);
-      toast.success("Product updated successfully!");
-      navigate("/products");
+      toast.success("Category updated successfully!");
+      navigate("/categories");
     } catch (error) {
-      toast.error("Error updating product!");
-      console.log("Error updating product!", error);
+      toast.error("Error updating category!");
+      console.log("Error updating category!", error);
     }
   };
 
   useEffect(() => {
     console.log("useeffect run------------!!!");
-    const fetchCategoriesandSellers = async () => {
-      const categoryres = await axios.get(
-        "http://127.0.0.1:8000/api/v1/categories/"
-      );
-      const sellerres = await axios.get(
-        "http://127.0.0.1:8000/api/v1/sellers/"
-      );
-      console.log("Category---------->", categoryres.data);
-      console.log("seller---------->", sellerres);
-      setCategory(categoryres.data);
-      setSeller(sellerres.data);
-    };
     if (formtype == "Edit") {
-      console.log("Edit product called!!!!!!!!!");
-      console.log("product item----->", location.state.productItem);
+      console.log("Edit category called!!!!!!!!!");
+      console.log("category item----->", location.state.categoryId);
 
-      const productItem = location.state.productItem || {};
-      console.log("productItemmmmmmmmmmm-->", productItem);
-      const productId = location.state.productItem.id;
-      console.log("productiddddddddddddddddd", productId);
-      setProductId(productId);
+      const categoryItem = location.state.categoryItem || {};
+      console.log("categoryItem-->", categoryItem);
+      const categoryId = location.state.categoryItem.id;
+      console.log("categoryId", categoryId);
+      setProductId(categoryId);
 
       setFormData({
-        category: productItem.category.id,
-        seller: productItem.seller.map((s) => s.id),
-        name: productItem.name,
-        price: productItem.price,
-        weight: productItem.weight,
-        expiry_date: productItem.expiry_date?.split("T")[0] || "",
-        quantity_in_stock: productItem.quantity_in_stock,
+        name: categoryItem.name,
       });
-      console.log("^^^^^^^^^^^^^^^^", productItem);
+      console.log("^^^^^^^^^^^^^^^^", categoryItem);
     }
-
-    fetchCategoriesandSellers();
   }, []);
 
   // console.log("****************1234", formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("!!!!!!!!!!!!!!!", e);
-    console.log("Seller ----------->", seller);
-    console.log("Category ------->", category);
-    console.log("category----------->", formData.category);
-    console.log("seller ---------->", formData.seller);
     console.log("FormData---------->", formData);
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/v1/products/",
+        "http://127.0.0.1:8000/api/v1/categories/",
         formData
       );
-      console.log("products added: ", res.data);
-      toast.success("Product added successfully!");
-      navigate("/products");
+      console.log("Category added: ", res.data);
+      toast.success("Category added successfully!");
+      navigate("/categories");
     } catch (error) {
-      console.error("error adding product", error);
-      toast.error("Error adding product!");
+      console.error("error adding category", error);
+      toast.error("Error adding category!");
     }
   };
 
   return (
     <>
-      <div className="bg-blue-100  p-6 items-center">
+      <div className="bg-blue-100  p-6 items-center min-h-screen">
         <div className=" flex gap-6 items-end justify-end">
           <button className="p-2 bg-blue-500 font-semibold text-white rounded-md">
             <Link to="/"> Dashboard</Link>
           </button>
           <button className="p-2 bg-blue-500 font-semibold text-white rounded-md">
-            <Link to="/products"> View all products</Link>
+            <Link to="/categories"> View all Categories</Link>
           </button>
         </div>
         <div className="w-full">
           <h2 className="text-center text-blue-500 font-bold text-2xl uppercase my-10">
-            {name} Product
+            {name} Category
           </h2>
           <div className="bg-white p-10 rounded-lg shadow-xl md:w-3/4 mx-auto lg:w-1/2">
             <form
@@ -163,63 +121,6 @@ const CategoryForm = ({ name }) => {
                   />
                 </div>
               ))}
-
-              <div className="mb-5">
-                <label
-                  className="block mb-2 font-bold text-gray-600"
-                  htmlFor="category"
-                >
-                  Choose a Category:
-                </label>
-                <select
-                  name="category"
-                  id="category"
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      category: e.target.value,
-                    })
-                  }
-                  className="border border-gray-300 shadow p-3 w-full rounded "
-                >
-                  <option value="">Choose a category</option>
-                  {category.map((ele, idx) => (
-                    <option key={idx} value={ele.id}>
-                      {ele.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="mb-5">
-                <label
-                  className="block mb-2 font-bold text-gray-600"
-                  htmlFor="seller"
-                >
-                  Choose a Seller:
-                </label>
-                <select
-                  name="seller"
-                  id="seller"
-                  value={formData.seller}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      seller: e.target.value,
-                    })
-                  }
-                  className="border border-gray-300 shadow p-3 w-full rounded "
-                >
-                  <option value="">Choose a Seller</option>
-
-                  {seller.map((ele, idx) => (
-                    <option key={idx} value={ele.id}>
-                      {ele.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
 
               <button
                 type="submit"

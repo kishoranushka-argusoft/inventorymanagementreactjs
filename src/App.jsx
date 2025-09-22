@@ -24,8 +24,8 @@ const App = () => {
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/addproduct" element={<AddProductForm name="Add" />} />
         <Route path="/editproduct" element={<AddProductForm name="Edit" />} />
-        <Route path="/addcategory" element={<CategoryForm />} name="Add"/>
-        <Route path="/editcategory" element={<CategoryForm />} name="Edit" />
+        <Route path="/addcategory" element={<CategoryForm name="Add" />} />
+        <Route path="/editcategory" element={<CategoryForm name="Edit" />} />
       </Routes>
     </BrowserRouter>
   );

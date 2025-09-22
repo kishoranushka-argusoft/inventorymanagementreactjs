@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
 import {  useNavigate} from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const Products = () => {
 
@@ -16,9 +17,9 @@ const Products = () => {
     const fetchProducts = async()=>{
       try{
         const response = await axios.get("http://127.0.0.1:8000/api/v1/products/")
-        console.log("*******************",response.data);
+        // console.log("*******************",response.data);
         setProduct(response.data)
-        console.log(product);
+        // console.log(product);
       }
       catch(error){
         console.error("Error fetching products ", error)
@@ -30,20 +31,8 @@ const Products = () => {
 
 
   const handleEdit =async(productItem)=>{
-    console.log(productItem);
-    // const productId = productItem.id
-    // console.log("111111111111",productId);
-    // try{
-    //   const getEditProductRes = await axios.get(
-    //     `http://127.0.0.1:8000/api/v1/product/${productId}`
-    //   );
-    //   console.log("******************4444",getEditProductRes.data);
-      // navigate(`/editproduct/${productItem}`)
+    console.log("productItemmmmmmm",productItem);
     navigate("/editproduct", {state: {productItem}})
-      // }
-    // catch(error){
-    //   console.log("error fetching product", error)
-    // }
   }
 
   const handleDelete = async (productId) => {
@@ -54,13 +43,11 @@ const Products = () => {
       );
       console.log("product deleted successfully!", getDeleteProductRes); 
       setProduct((prev)=> prev.filter((product)=>product.id !== productId))
+      toast.success("product deleted successfully!")
       console.log(productId);
     } 
-    
-    
-
     catch (error) {
-      console.log("error fetching product", error);
+      console.log("error deleting product", error);
     }
   };
   
