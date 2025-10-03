@@ -8,14 +8,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 const AddProductForm = ({ name }) => {
   const formtype = name;
   console.log(formtype);
-  // const formtypename = formtype.name
-  // console.log("form type name ----------->",formtypename);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // console.log("locationnnnnnnnnnnn",location);
-  // console.log("product item----->",location.state.productItem);
-  // console.log("product id----->", location.state.productItem.id);
 
   const [category, setCategory] = useState([]);
   const [seller, setSeller] = useState([]);
@@ -23,37 +18,15 @@ const AddProductForm = ({ name }) => {
 
   const [formData, setFormData] = useState({
     category: "",
-    seller: "",
+    seller: [],
     name: "",
     price: "",
     weight: "",
     expiry_date: "",
     quantity_in_stock: "",
-    image: "",
+    image: null,
   });
 
-  // const productId = location.state.productItem.id;
-  // console.log("location", location);
-  // console.log("id : ", );
-  // console.log("Product id : ---------------->",productId);
-
-  const handleEdit = async (productId) => {
-    // console.log(e);
-    console.log(productId);
-    // e.preventDefault()
-    try {
-      const editRes = await axios.put(
-        `http://127.0.0.1:8000/api/v1/product/${productId}`,
-        formData
-      );
-      console.log("==========================", editRes.data);
-      toast.success("Product updated successfully!");
-      navigate("/products");
-    } catch (error) {
-      toast.error("Error updating product!");
-      console.log("Error updating product!", error);
-    }
-  };
 
   useEffect(() => {
     console.log("useeffect run------------!!!");
@@ -64,19 +37,16 @@ const AddProductForm = ({ name }) => {
       const sellerres = await axios.get(
         "http://127.0.0.1:8000/api/v1/sellers/"
       );
-      console.log("Category---------->", categoryres.data);
-      console.log("seller---------->", sellerres);
+ 
       setCategory(categoryres.data);
       setSeller(sellerres.data);
     };
     if (formtype == "Edit") {
-      console.log("Edit product called!!!!!!!!!");
-      console.log("product item----->", location.state.productItem);
+     
+      console.log("type", typeof(formData.image));
 
       const productItem = location.state.productItem || {};
-      console.log("productItemmmmmmmmmmm-->", productItem);
       const productId = location.state.productItem.id;
-      console.log("productiddddddddddddddddd", productId);
       setProductId(productId);
 
       setFormData({
@@ -89,27 +59,92 @@ const AddProductForm = ({ name }) => {
         quantity_in_stock: productItem.quantity_in_stock,
         image: productItem.image,
       });
-      console.log("^^^^^^^^^^^^^^^^", productItem);
     }
 
     fetchCategoriesandSellers();
   }, []);
 
-  // console.log("****************1234", formData);
+
+  const handleEdit = async (productId) => {
+    // console.log(productId);
+    const formDataToSend = new FormData();
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("weight", formData.weight);
+    formDataToSend.append("expiry_date", formData.expiry_date);
+    formDataToSend.append("quantity_in_stock", formData.quantity_in_stock);
+    // console.log(typeof(formData.image));
+    if (formData.image && typeof(formData.image) != "string") {
+      formDataToSend.append("image", formData.image);
+    }
+    if (formData.seller && Array.isArray(formData.seller)) {
+      formData.seller.forEach((sellerId) => {
+        formDataToSend.append("seller", sellerId);
+      });
+    }
+
+
+    
+    try {
+      console.log("###################", formData);
+      const editRes = await axios.put(
+        `http://127.0.0.1:8000/api/v1/product/${productId}`,
+        formDataToSend,
+        {
+          headers: {
+            "content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("==========================", editRes.data);
+      toast.success("Product updated successfully!");
+      navigate("/products");
+    } catch (error) {
+      toast.error("Error updating product!");
+      console.log("Error updating product!", error);
+    }
+  };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("!!!!!!!!!!!!!!!", e);
-    console.log("Seller ----------->", seller);
-    console.log("Category ------->", category);
-    console.log("category----------->", formData.category);
-    console.log("seller ---------->", formData.seller);
-    console.log("FormData---------->", formData);
+    console.log("formData before sending------------>",formData);
+    console.log("seller selected:------>", formData.seller);
+    console.log("Seller types: ",typeof formData.seller);
+    const formDataToSend = new FormData();
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("weight", formData.weight);
+    formDataToSend.append("expiry_date", formData.expiry_date);
+    formDataToSend.append("quantity_in_stock", formData.quantity_in_stock);
+    if(formData.image){
+      formDataToSend.append("image",formData.image)
+    }
+    if(formData.seller && Array.isArray(formData.seller)){
+      formData.seller.forEach((sellerId)=>{
+        formDataToSend.append("seller", sellerId)
+      })
+    }
+
+
+    //debug
+    for(let [key, value] of formDataToSend.entries()){
+      console.log(key, value);
+      // console.log("value: ",value);
+    }
 
     try {
       const res = await axios.post(
         "http://127.0.0.1:8000/api/v1/products/",
-        formData
+        formDataToSend,
+        {
+          headers: {
+            "content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log("products added: ", res.data);
       toast.success("Product added successfully!");
@@ -119,6 +154,11 @@ const AddProductForm = ({ name }) => {
       toast.error("Error adding product!");
     }
   };
+
+
+  useEffect(()=>{
+    console.log(formData);
+  },[formData])
 
   return (
     <>
@@ -137,6 +177,7 @@ const AddProductForm = ({ name }) => {
           </h2>
           <div className="bg-white p-10 rounded-lg shadow-xl md:w-3/4 mx-auto lg:w-1/2">
             <form
+              encType="multipart/form-data"
               onSubmit={(e) => {
                 e.preventDefault();
                 formtype == "Add" ? handleSubmit(e) : handleEdit(productId);
@@ -203,27 +244,25 @@ const AddProductForm = ({ name }) => {
                 >
                   Choose a Seller:
                 </label>
-                <select
-                  name="seller"
-                  id="seller"
-                  value={formData.seller}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      seller: e.target.value,
-                    })
-                  }
-                  className="border border-gray-300 shadow p-3 w-full rounded "
-                >
-                  <option value="">Choose a Seller</option>
 
-                  {seller.map((ele, idx) => (
-                    <option key={idx} value={ele.id}>
+                <div>
+                  {seller.map((ele,idx)=>(
+                    <label key={idx} className="flex items-center gap-2">
+                      <input type="checkbox" value={ele.id} checked={formData.seller.includes(ele.id)} onChange={(e)=>{
+                        if(e.target.checked){
+                          setFormData({...formData, seller:[...formData.seller, ele.id]})
+                        }
+                        else{
+                          setFormData({...formData,seller:formData.seller.filter((id)=> id!== ele.id)})
+                        }
+                      }} />
                       {ele.name}
-                    </option>
+                    </label>
                   ))}
-                </select>
+                </div>
               </div>
+
+              {formData.image && ( <img src={formData.image instanceof File? URL.createObjectURL(formData.image): formData.image.startsWith("http")?formData.image:`http://127.0.0.1:8000${formData.image}`} alt="Current image" width={100} />)}
 
               <div className="mb-5">
                 <label
@@ -236,6 +275,12 @@ const AddProductForm = ({ name }) => {
                   id="image"
                   type="file"
                   name="image"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      image: e.target.files[0],
+                    })
+                  }
                   className="border border-gray-300 shadow p-3 w-full rounded "
                 />
               </div>

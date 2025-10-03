@@ -1,11 +1,30 @@
-import React from "react";
-import { CardData } from "./data";
+import React, { useEffect, useState } from "react";
+import { getCardData } from "./data";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Card = () => {
+
+  const [dashboardData, setDashboardData] = useState({})
+
+  const getDashboardData = async()=>{
+    try{
+    const response = await axios.get("http://127.0.0.1:8000/api/v1/dashboard/")
+    console.log("dashboard response:",response?.data);
+    setDashboardData(response.data || {})
+    }    
+    catch(error){
+      console.error("error getting dashboard data",error);
+    }
+  }
+
+  useEffect(()=>{
+    getDashboardData()
+  },[])
+
   return (
     <div className="grid grid-cols-4 gap-4">
-      {CardData.map((ele) => {
+      {getCardData(dashboardData).map((ele) => {
         return (
           <div
             className={`${ele.bg_col} max-w-sm overflow-hidden  border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700`}

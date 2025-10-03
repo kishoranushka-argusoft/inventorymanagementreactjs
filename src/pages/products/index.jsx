@@ -17,7 +17,7 @@ const Products = () => {
     const fetchProducts = async()=>{
       try{
         const response = await axios.get("http://127.0.0.1:8000/api/v1/products/")
-        // console.log("*******************",response.data);
+        console.log("*******************",response.data);
         setProduct(response.data)
         // console.log(product);
       }
@@ -88,7 +88,7 @@ const Products = () => {
           {product.map((item, idx) => (
             <tr key={idx}>
               <td className="border border-gray-300">{idx + 1}</td>
-              <td className="border border-gray-300">
+              <td className=" border border-gray-300 flex items-center justify-center">
                 <img
                   className="w-36 h-36 object-cover object-center"
                   src={`http://127.0.0.1:8000/${item.image}`}
@@ -104,7 +104,13 @@ const Products = () => {
                 {item.expiry_date.split("T")[0]}
               </td>
               <td className="border border-gray-300">{item.category.name}</td>
-              <td className="border border-gray-300">{item.seller[0].name}</td>
+              <td className="border border-gray-300">
+                {item?.seller?.map((seller, index) => (
+                  <p key={index} className="">
+                    {seller?.name}
+                  </p>
+                ))}
+              </td>
               <td className="border border-gray-300 px-4">
                 {item.created_at.split("T")[0]}
               </td>
