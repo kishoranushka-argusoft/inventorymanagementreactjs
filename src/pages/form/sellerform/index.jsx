@@ -5,33 +5,25 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const CategoryForm = ({ name }) => {
+const SellerForm = ({ name }) => {
   const formtype = name;
   console.log(formtype);
   const navigate = useNavigate();
   const location = useLocation();
 
-
-  const [productId, setProductId] = useState("");
+  const [sellerId, setSellerId] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    image: null
+    image: null,
   });
 
-
-
-  const handleEdit = async (categoryId) => {
-    console.log(categoryId);
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    // console.log(typeof(formData.image));
-    if (formData.image && typeof formData.image != "string") {
-      formDataToSend.append("image", formData.image);
-    }
+  const handleEdit = async (sellerId) => {
+    console.log(sellerId);
+    
     try {
       const editRes = await axios.put(
-        `http://127.0.0.1:8000/api/v1/category/${categoryId}`,
-        formDataToSend,
+        `http://127.0.0.1:8000/api/v1/category/${sellerId}`,
+        formData,
         {
           headers: {
             "content-Type": "multipart/form-data",
@@ -39,11 +31,11 @@ const CategoryForm = ({ name }) => {
         }
       );
       console.log("==========================", editRes.data);
-      toast.success("Category updated successfully!");
-      navigate("/categories");
+      toast.success("Seller updated successfully!");
+      navigate("/sellers");
     } catch (error) {
-      toast.error("Error updating category!");
-      console.log("Error updating category!", error);
+      toast.error("Error updating Seller!");
+      console.log("Error updating seller!", error);
     }
   };
 
@@ -51,19 +43,20 @@ const CategoryForm = ({ name }) => {
     console.log("useeffect run------------!!!");
     if (formtype == "Edit") {
       console.log("Edit category called!!!!!!!!!");
-      console.log("category item----->", location.state.categoryId);
+      console.log("Seller item----->", location.state.sellerId);
 
-      const categoryItem = location.state.categoryItem || {};
-      console.log("categoryItem-->", categoryItem);
-      const categoryId = location.state.categoryItem.id;
-      console.log("categoryId", categoryId);
-      setProductId(categoryId);
+      const sellerItem = location.state.sellerItem || {};
+      console.log("sellerItem-->", sellerItem);
+      const sellerId = location.state.categoryItem.id;
+      console.log("sellerId", sellerId);
+      setSellerId(sellerId);
 
       setFormData({
-        name: categoryItem.name,
-        image: categoryItem.image,
+        name: sellerItem.name,
+        email: sellerItem.email,
+        phone: sellerItem.phone,
       });
-      console.log("^^^^^^^^^^^^^^^^", categoryItem);
+      console.log("^^^^^^^^^^^^^^^^", sellerItem);
     }
   }, []);
 
@@ -72,28 +65,23 @@ const CategoryForm = ({ name }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("FormData---------->", formData);
-    const formDataToSend = new FormData()
-
-    formDataToSend.append("name", formData.name);
-    if (formData.image) {
-      formDataToSend.append("image", formData.image);
-    }
+    
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/v1/categories/",
-        formDataToSend,
+        "http://127.0.0.1:8000/api/v1/sellers/",
+        formData,
         {
           headers: {
             "content-Type": "multipart/form-data",
           },
         }
       );
-      console.log("Category added: ", res.data);
-      toast.success("Category added successfully!");
-      navigate("/categories");
+      console.log("Seller added: ", res.data);
+      toast.success("Seller added successfully!");
+      navigate("/sellers");
     } catch (error) {
-      console.error("error adding category", error);
-      toast.error("Error adding category!");
+      console.error("error adding seller", error);
+      toast.error("Error adding seller!");
     }
   };
 
@@ -105,7 +93,7 @@ const CategoryForm = ({ name }) => {
             <Link to="/"> Dashboard</Link>
           </button>
           <button className="p-2 bg-blue-500 font-semibold text-white rounded-md">
-            <Link to="/categories"> View all Categories</Link>
+            <Link to="/sellers"> View all Sellers</Link>
           </button>
         </div>
         <div className="w-full">
@@ -116,7 +104,7 @@ const CategoryForm = ({ name }) => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                formtype == "Add" ? handleSubmit(e) : handleEdit(productId);
+                formtype == "Add" ? handleSubmit(e) : handleEdit(sellerId);
               }}
             >
               {inputData.map((ele, idx) => (
@@ -144,42 +132,6 @@ const CategoryForm = ({ name }) => {
                   />
                 </div>
               ))}
-
-              {formData.image && (
-                <img
-                  src={
-                    formData.image instanceof File
-                      ? URL.createObjectURL(formData.image)
-                      : formData.image.startsWith("http")
-                      ? formData.image
-                      : `http://127.0.0.1:8000${formData.image}`
-                  }
-                  alt="Current image"
-                  width={100}
-                />
-              )}
-
-              <div className="mb-5">
-                <label
-                  className="block mb-2 font-bold text-gray-600"
-                  htmlFor="image"
-                >
-                  Choose an image:
-                </label>
-                <input
-                  id="image"
-                  type="file"
-                  name="image"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      image: e.target.files[0],
-                    })
-                  }
-                  className="border border-gray-300 shadow p-3 w-full rounded "
-                />
-              </div>
-
               <button
                 type="submit"
                 className="block w-full bg-blue-500 text-white font-bold p-4 rounded-lg"
@@ -194,4 +146,4 @@ const CategoryForm = ({ name }) => {
   );
 };
 
-export default CategoryForm;
+export default SellerForm;
